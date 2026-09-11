@@ -77,7 +77,7 @@ export default function App() {
           <div className="intro-copy">
             <h2 id="intro-title">Turn a business question into a query you can explain.</h2>
             <p className="intro-description">
-              Choose a familiar question to see a carefully written SQL example and the reasoning behind it.
+              Choose a business question to receive a ready-to-use SQL query along with a simple explanation that breaks down the query logic and expected results.
             </p>
           </div>
           <div className="intro-accent" aria-hidden="true">
