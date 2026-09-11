@@ -75,7 +75,6 @@ export default function App() {
       <main>
         <section className="intro-grid" aria-labelledby="intro-title">
           <div className="intro-copy">
-            <p className="eyebrow">Make the question legible</p>
             <h2 id="intro-title">Turn a business question into a query you can explain.</h2>
             <p className="intro-description">
               Choose a familiar question to see a carefully written SQL example and the reasoning behind it.
