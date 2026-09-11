@@ -1,0 +1,28 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+.vite/
+
+# Environment and local runtime files
+.env
+.env*
+.env.*
+!.env.example
+logs/
+*.log
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+
+# Python tooling that may be used locally
+venv/
+.venv/
+__pycache__/
+*.pyc
