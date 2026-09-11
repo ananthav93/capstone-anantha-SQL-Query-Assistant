@@ -36,22 +36,17 @@ The primary user is a business analyst, product stakeholder, or developer who ne
 
 ```mermaid
 flowchart TD
-    A[Open SQL Query Assistant] --> B[View empty shell]
-    B --> C{Choose a business question}
-    C -->|No selection| D[Query panel shows empty state<br/>Explanation panel shows empty state<br/>Copy button disabled]
-    C -->|Select question| E[App stores selected question id]
-    E --> F[Repository resolves matching static record]
-    F --> G[Show exact SQL template]
-    F --> H[Show plain-language explanation]
-    G --> I{Copy query?}
-    I -->|No| J[Continue reading or choose another question]
-    I -->|Yes| K[Copy SQL to browser clipboard]
-    K --> L{Clipboard result}
-    L -->|Success| M[Show copied feedback]
-    L -->|Failure| N[Keep query visible and show failure feedback]
-    J --> C
-    M --> C
-    N --> C
+    A[Open SQL Query Assistant] --> B[Choose a business question]
+    B --> C[See the SQL query and explanation]
+    C --> D{Copy the query?}
+    D -->|No| E[Continue exploring]
+    D -->|Yes| F[Copy SQL to the clipboard]
+    F --> G{Copy succeeds?}
+    G -->|Yes| H[Show copied feedback]
+    G -->|No| I[Keep the query visible and show an error]
+    E --> B
+    H --> B
+    I --> B
 ```
 
 ### User-flow behavior
@@ -133,29 +128,29 @@ sequenceDiagram
     participant Clipboard as navigator.clipboard
 
     Browser->>App: Mount application
-    App->>Repo: getAllQuestions()
-    Repo-->>App: Question options
-    App->>Panels: query=null, explanation=null
-    Panels-->>User: Empty states; copy disabled
+    App->>Repo: Load all questions
+    Repo-->>App: Return question options
+    App->>Panels: Show empty states
+    Panels-->>User: Copy action is disabled
 
-    User->>Browser: Select question ID
-    Browser->>App: onChange(questionId)
-    App->>Repo: getQuestionById(questionId)
-    Repo->>Catalog: Find matching ID
-    Catalog-->>Repo: BusinessQuestion record
-    Repo-->>App: Defensive record copy
-    App->>Panels: SQL and explanation props
-    Panels-->>User: Exact query and explanation
+    User->>Browser: Select a question
+    Browser->>App: Send selected question ID
+    App->>Repo: Find selected question
+    Repo->>Catalog: Find matching record
+    Catalog-->>Repo: Return question record
+    Repo-->>App: Return question record
+    App->>Panels: Show SQL and explanation
+    Panels-->>User: Display query and explanation
 
-    User->>Browser: Activate Copy query
-    Browser->>App: handleCopy()
-    App->>Clipboard: writeText(selectedQuestion.sql)
+    User->>Browser: Activate copy query
+    Browser->>App: Request query copy
+    App->>Clipboard: Write SQL to clipboard
     alt Clipboard succeeds
-        Clipboard-->>App: Resolved promise
-        App-->>User: Copied status
-    else Clipboard unavailable or rejects
-        Clipboard-->>App: Failure
-        App-->>User: Failure status; query remains visible
+        Clipboard-->>App: Copy succeeded
+        App-->>User: Show copied feedback
+    else Clipboard fails
+        Clipboard-->>App: Copy failed
+        App-->>User: Keep query visible and show an error
     end
 ```
 
